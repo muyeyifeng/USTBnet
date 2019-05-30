@@ -1,0 +1,70 @@
+﻿<Window x:Class="USTBnet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:USTBnet"
+        mc:Ignorable="d"
+        Title="校园网登录程序"
+        Width="300"
+        Height="200"
+        ResizeMode="NoResize">
+    <TabControl TabStripPlacement="Top">
+        <TabItem Header="登陆页面">
+            <Grid Name="LoginGrid">
+                <Label Content="学号/工号" Name="uMes" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="20,0,0,0" Height="25" Width="70"></Label>
+                <TextBox Name="userid" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,0,0,0" />
+                <Label Content="密码" Name="pMes" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,30,0,0" Height="25" Width="70"></Label>
+                <PasswordBox Name="passwd" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
+                <Image Name="passwdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0" PreviewMouseDown="PasswdVisibility_PreviewMouseDown" PreviewMouseUp="PasswdVisibility_PreviewMouseUp"></Image>
+
+
+                <Button Name="LoginButton" Click="Login_Click" Content="登录/刷新" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0"></Button>
+                <Button Name="DropButton" Click="Drop_Click" Content="注销" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,70,50,0"/>
+
+                <Button Name="ClearButton" Click="Clear_Click" Content="清除" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,100,0,0"></Button>
+                <Button Name="ExitButton" Click="Exit_Click" Content="退出" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"/>
+                <!--隐藏控件-->
+                <TextBox Name="showPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
+            </Grid>
+        </TabItem>
+        <TabItem Name="userInfoTab" Header="账户信息" Visibility="Visible">
+            <Grid Name="userInfoGrid">
+                <TextBlock Name="userInfoText"></TextBlock>
+                <Button Name="userInfoRefresh" Content="刷新" Width="75" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Click="UserInfoRefresh_Click" ></Button>
+            </Grid>
+        </TabItem>
+        <TabItem Name="payTab" Header="网络账户充值" Visibility="Visible">
+            <Grid Name="payGrid">
+                <Label Name="payid" Content="用户名" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="20,0,0,0" Height="25" Width="70"></Label>
+                <TextBox Name="payuserid" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,0,0,0" />
+                <!--待隐藏控件-->
+                <Label Name="paypwd" Content="密码" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,30,0,0" Height="25" Width="70"></Label>
+                <PasswordBox Name="paypasswd" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
+                <Image Name="paypasswdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0" PreviewMouseDown="PaypasswdVisibility_PreviewMouseDown" PreviewMouseUp="PaypasswdVisibility_PreviewMouseUp"></Image>
+                <TextBox Name="payauth" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,60,0,0" />
+
+                <Image Name="authImage" Source="icon/error.png" Width="85" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="15,60,0,0" PreviewMouseDown="AuthImageBtn_Click"></Image>
+                <Button Name="authImageBtn" Width="85" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="15,60,0,0" Click="AuthImageBtn_Click">
+                    <Button.Background>
+                        <ImageBrush>
+                        </ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button Name="payLogin"  Click="PayLogin_Click" Content="登录" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,100,0,0"></Button>
+                <Button Name="payExit" Click="Exit_Click" Content="退出" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"/>
+
+                <!--隐藏控件-->
+                <Label Visibility="Hidden" Name="showBalanceText" Content="余额" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,30,0,0" Height="25" Width="70"></Label>
+                <Label Visibility="Hidden" Name="showBalance" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0"></Label>
+                <Label Visibility="Hidden" Name="reChargeText" Content="充值金额" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,60,0,0" Height="25" Width="70"></Label>
+                <TextBox Visibility="Hidden" Name="reCharge" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,60,0,0"></TextBox>
+                <Button Visibility="Hidden"  Name="submit" Click="Submit_Click" Content="充值" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,100,0,0"></Button>
+                <Button Visibility="Hidden" Name="back" Click="Back_Click" Content="返回" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"></Button>
+                <TextBox Visibility="Hidden" Name="timeOut"></TextBox>
+                <TextBox Name="payShowPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</Window>
