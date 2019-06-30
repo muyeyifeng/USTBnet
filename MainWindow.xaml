@@ -10,7 +10,7 @@
         Height="200"
         ResizeMode="NoResize">
     <TabControl TabStripPlacement="Top">
-        <TabItem Header="登陆页面">
+        <TabItem Header="登陆页面" Width="70">
             <Grid Name="LoginGrid">
                 <Label Content="学号/工号" Name="uMes" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="20,0,0,0" Height="25" Width="70"></Label>
                 <TextBox Name="userid" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,0,0,0" />
@@ -28,13 +28,13 @@
                 <TextBox Name="showPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
             </Grid>
         </TabItem>
-        <TabItem Name="userInfoTab" Header="账户信息" Visibility="Visible">
+        <TabItem Name="userInfoTab" Header="账户信息" Visibility="Visible" Width="70">
             <Grid Name="userInfoGrid">
                 <TextBlock Name="userInfoText"></TextBlock>
                 <Button Name="userInfoRefresh" Content="刷新" Width="75" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Click="UserInfoRefresh_Click" ></Button>
             </Grid>
         </TabItem>
-        <TabItem Name="payTab" Header="网络账户充值" Visibility="Visible">
+        <TabItem Name="payTab" Header="账户充值" Visibility="Visible" Width="70">
             <Grid Name="payGrid">
                 <Label Name="payid" Content="用户名" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="20,0,0,0" Height="25" Width="70"></Label>
                 <TextBox Name="payuserid" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,0,0,0" />
@@ -65,6 +65,10 @@
                 <TextBox Name="payShowPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
             </Grid>
         </TabItem>
+        <TabItem Header="软件信息" Width="70">
+            <Grid>
+                <Label Name="Information" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Label>
+            </Grid>
+        </TabItem>
     </TabControl>
-
 </Window>

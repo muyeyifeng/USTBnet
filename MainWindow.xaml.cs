@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
-using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,13 +13,12 @@ namespace USTBnet
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string LOGIN = "http://202.204.48.82";
-        private const string DROP = "http://202.204.48.82/F.htm";
-        private const string PAYIMAGE = "https://pay.ustb.edu.cn/authImage";
         private string appid = "ustb_muyeyfieng";
+        private bool type = false;
         private string _userid = "", _passwd = "", _v6ip = "";
         private const string LoginInfo = "infom.sav";
         private const string PayInfo = "payinfom.sav";
+
         private List<string> authImagePath = new List<string>();
         /// <summary>
         /// 窗体载入入口
@@ -29,9 +27,17 @@ namespace USTBnet
         {
             DeleteAuthImage();
             InitializeComponent();
-            LoadLogin();
-            LoadPay();
-            RefreshAuthImage();
+            SoftInformation();
+            try
+            {
+                LoadLogin();
+                LoadPay();
+                RefreshAuthImage();
+            }
+            catch
+            {
+
+            }
         }
         /**********************************************************************************************/
         /*************************************以下为控件事件所调函数***********************************/
@@ -42,27 +48,16 @@ namespace USTBnet
             {
                 userInfoTab.Visibility = Visibility.Visible;
                 WriteFile(_userid, _passwd, RandomAESKey(), LoginInfo);
-                ShowUserInfom(HttpCommands.Get(LOGIN));
+                ShowUserInfom(CNLLogin.Get());
             }
         }
         private void Drop_Click(object sender, RoutedEventArgs e)
         {
-            int status = DropNet();
-            switch (status)
-            {
-                case 301:
-                    MessageBox.Show("网络错误！");
-                    break;
-                case 302:
-                    break;
-                case 400:
-                    MessageBox.Show("注销成功！");
-                    userInfoTab.Visibility = Visibility.Hidden;
-                    userInfoText.Text = "";
-                    break;
-                default:
-                    break;
-            }
+            DropNet();
+            MessageBox.Show("注销成功！");
+            userInfoTab.Visibility = Visibility.Hidden;
+            userInfoText.Text = "";
+
         }
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
@@ -92,7 +87,8 @@ namespace USTBnet
         }
         private void UserInfoRefresh_Click(object sender, RoutedEventArgs e)
         {
-            userInfoText.Text = HttpCommands.Get(LOGIN);
+            //userInfoText.Text = HttpCommands.Get(LOGIN);
+            userInfoText.Text = CNLLogin.Get();
         }
         private void PayLogin_Click(object sender, RoutedEventArgs e)
         {
@@ -118,7 +114,7 @@ namespace USTBnet
         private void LoadLogin()
         {
             string[] userinfo = ReadFile(LoginInfo);
-            Boolean hasinfo = true;
+            bool hasinfo = true;
             foreach (string info in userinfo)
             {
                 if (info.Length == 0)
@@ -129,7 +125,7 @@ namespace USTBnet
                 userid.Text = userinfo[0];
                 passwd.Password = userinfo[1];
             }
-            userInfoText.Text = HttpCommands.Get(LOGIN);
+            userInfoText.Text = CNLLogin.Get();
         }
         /// <summary>
         /// 返回值代码：
@@ -141,11 +137,12 @@ namespace USTBnet
         {
             _userid = userid.Text;
             _passwd = passwd.Password;
-            _v6ip = HttpCommands.GetIPV6();
+            _v6ip = CNLLogin.GetIPV6();
             int statusCode = 0;
             if (_userid != "" && _passwd != "")
             {
-                statusCode = HttpCommands.Post(LOGIN, new string[] { _userid, _passwd, _v6ip });
+                if (CNLLogin.Post(new string[] { _userid, _passwd, _v6ip }) != null)
+                    statusCode = 200;
             }
             else
             {
@@ -155,19 +152,12 @@ namespace USTBnet
             return statusCode;
         }
         /// <summary>
-        /// 返回值代码：
-        /// 300 超时 301 网络状态错误 302 未知错误
-        /// 400 登出成功 
+        /// 注销登录
         /// </summary>
         /// <returns></returns>
-        private int DropNet()
+        private void DropNet()
         {
-            string get = HttpCommands.Get(DROP);
-            if (get.Length > 0)
-            {
-                return 400;
-            }
-            return 301;
+            CNLLogin.Drop();
         }
         /// <summary>
         /// 登陆成功后显示账户信息
@@ -181,7 +171,7 @@ namespace USTBnet
         /// 图标更改及显示密码
         /// </summary>
         /// <param name="visability"></param>
-        private void ChangeImage(Boolean visability, Image image, PasswordBox passwordBox, TextBox showBox)
+        private void ChangeImage(bool visability, Image image, PasswordBox passwordBox, TextBox showBox)
         {
             string path = visability ? "icon/eye.png" : "icon/eye_no.png";
             ImageBrush imageBrush = new ImageBrush();
@@ -206,9 +196,9 @@ namespace USTBnet
         /// </summary>
         private void LoadPay()
         {
-            HttpCommands.GetPayCookie();
+            Pay.GetPayCookie();
             string[] payinfo = ReadFile(PayInfo);
-            Boolean hasinfo = true;
+            bool hasinfo = true;
             foreach (string info in payinfo)
             {
                 if (info.Length == 0)
@@ -229,32 +219,44 @@ namespace USTBnet
             string _payuserid = payuserid.Text;
             string _paypasswd = paypasswd.Password;
             string _checkcode = payauth.Text;
-            string balance;
             if (_payuserid != "" && _paypasswd != "" && _checkcode != "")
             {
-                balance = HttpCommands.PayPostLogin(new string[] { _payuserid, _paypasswd, _checkcode });
-                if (balance == "302")
-                {
-                    MessageBox.Show("信息错误，请检查！");
-                    RefreshAuthImage();
-                }
-                else if (balance == "301")
+                string status = Pay.PostLogin(new string[] { _payuserid, _paypasswd, _checkcode });
+                if (status == "301")
                 {
                     MessageBox.Show("未知错误，请重试！");
                     RefreshAuthImage();
                 }
-                else if (balance == "303")
+                else if (status == "303")
                 {
                     string mes = "系统开放时间：凌晨00:15至晚间23:20\n但是根据经验，开放时间远晚于00:15";
                     timeOut.Visibility = Visibility.Visible;
                     timeOut.Text = mes;
                     MessageBox.Show(mes);
                 }
-                else
+                else if (status == "400")
                 {
-                    WriteFile(payuserid.Text, paypasswd.Password, RandomAESKey(), PayInfo);
-                    RefreshAuthImage();
-                    ChangePayControl(balance, true);
+                    if (type = new Choice().getChoice())
+                    {
+                        string balance = Pay.getBalance(_payuserid);
+                        if (balance == "302")
+                        {
+                            MessageBox.Show("信息错误，请检查！");
+                            RefreshAuthImage();
+                        }
+                        else
+                        {
+                            WriteFile(payuserid.Text, paypasswd.Password, RandomAESKey(), PayInfo);
+                            RefreshAuthImage();
+                            ChangePayControl(balance, true);
+                        }
+                    }
+                    else
+                    {
+                        WriteFile(payuserid.Text, paypasswd.Password, RandomAESKey(), PayInfo);
+                        RefreshAuthImage();
+                        ChangePayControl("不可获取", true);
+                    }
                 }
             }
             else
@@ -271,42 +273,22 @@ namespace USTBnet
             double reChargeDouble;
             if (double.TryParse(reCharge.Text, out reChargeDouble))
             {
-                string status = HttpCommands.PayPost(new string[] { payuserid.Text, reCharge.Text });
+                string status;
+                if (type)
+                    status = Pay.CreateOrder(new string[] { payuserid.Text, reCharge.Text });
+                else
+                    status = Pay.CreateCOrder(new string[] { reCharge.Text });
                 //string status = "";
-                if (status.Equals("200"))
+                if (status == null)
                 {
                     MessageBox.Show("Error");
                 }
                 else
                 {
-                    string qRCodepath = HttpCommands.Base64StringToImage(status);
-                    Grid grid = new Grid();
-                    
-                    ImageBrush imageBrush = new ImageBrush();
-                    imageBrush.ImageSource = new BitmapImage(new Uri(qRCodepath, UriKind.Relative));
-                    Image image = new Image();
-                    image.Source = imageBrush.ImageSource;
-                    image.HorizontalAlignment = HorizontalAlignment.Center;
-                    image.VerticalAlignment = VerticalAlignment.Top;
-                    image.Height = 260;
-                    image.Width = 260;
+                    string qRCodepath = Pay.Base64StringToImage(status);
 
-                    Label label = new Label();
-                    label.Content = "扫码支付后关闭窗口\n2-5分钟后更新余额";
-                    label.Height = 50;
-                    label.HorizontalAlignment = HorizontalAlignment.Center;
-                    label.VerticalAlignment = VerticalAlignment.Bottom;
+                    new QRImg(qRCodepath, type);
 
-                    grid.Children.Add(image);
-                    grid.Children.Add(label);
-
-                    Window window = new Window();
-                    window.Content = grid;
-                    window.Title = "微信扫码支付";
-                    window.Height = 350;
-                    window.Width = 300;
-                    window.ResizeMode = ResizeMode.NoResize;
-                    window.ShowDialog();
                     reCharge.Text = "";
                     ChangePayControl("", false);
                     RefreshAuthImage();
@@ -321,7 +303,7 @@ namespace USTBnet
         /// 成功获取网络流量费缴费页面信息
         /// </summary>
         /// <param name="balance"></param>
-        private void ChangePayControl(string balance, Boolean visibility)
+        private void ChangePayControl(string balance, bool visibility)
         {
             showBalanceText.Visibility = visibility ? Visibility.Visible : Visibility.Hidden;
             showBalance.Visibility = visibility ? Visibility.Visible : Visibility.Hidden;
@@ -334,7 +316,7 @@ namespace USTBnet
             paypwd.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
             paypasswd.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
             payauth.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
-            authImage.Visibility= !visibility ? Visibility.Visible : Visibility.Hidden;
+            authImage.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
             authImageBtn.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
             payLogin.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
             payExit.Visibility = !visibility ? Visibility.Visible : Visibility.Hidden;
@@ -346,7 +328,7 @@ namespace USTBnet
         /// </summary>
         private void RefreshAuthImage()
         {
-            string path = HttpCommands.SaveAsWebImg(PAYIMAGE);
+            string path = Pay.AuthImage();
             ImageBrush imageBrush = new ImageBrush();
             if (path.Length > 0)
             {
@@ -362,6 +344,7 @@ namespace USTBnet
                 authImageBtn.Visibility = Visibility.Hidden;
             }
         }
+
         /**********************************************************************************************/
         /***************************************以下为通用调用函数*************************************/
         /// <summary>
@@ -399,7 +382,7 @@ namespace USTBnet
         /// <param name="userid"></param>
         /// <param name="passwd"></param>
         /// <returns></returns>
-        private Boolean WriteFile(string _userid, string _passwd, string AESKey, string filePath)
+        private bool WriteFile(string _userid, string _passwd, string AESKey, string filePath)
         {
             string encodeInfo = Cryptography.AES_encrypt(_userid + ":" + _passwd, AESKey, appid);
             File.WriteAllText(filePath, AESKey + encodeInfo);
@@ -429,7 +412,7 @@ namespace USTBnet
             DirectoryInfo root = new DirectoryInfo(rootPath);
             foreach (FileInfo file in root.GetFiles())
             {
-                if ((file.Name.Contains("AuthImage")|| file.Name.Contains("QRCODE")) && file.Name.Contains(".png"))
+                if ((file.Name.Contains("AuthImage") || file.Name.Contains("QRCODE")) && file.Name.Contains(".png"))
                 {
                     authImagePath.Add(file.Name);
                 }
@@ -439,5 +422,123 @@ namespace USTBnet
                 File.Delete(path);
             }
         }
+        private void SoftInformation()
+        {
+            StringBuilder info = new StringBuilder();
+            info.Append("制作人：muyeyifeng\n");
+            info.Append("编译日期：2019/6/30\n");
+            info.Append("版本：1.2.1.20\n");
+            info.Append("联系方式：master@muyeyifeng.site");
+            Information.Content = info.ToString();
+        }
+    }
+}
+/// <summary>
+/// 创建选择窗口
+/// </summary>
+class Choice : Window
+{
+    private bool whichOne = false;
+    public Choice()
+    {
+        Grid grid = new Grid();
+
+        Label choice = new Label();
+        choice.Content = "请选择充值项目：";
+        choice.Height = 50;
+        choice.HorizontalAlignment = HorizontalAlignment.Center;
+        choice.VerticalAlignment = VerticalAlignment.Top;
+
+        Button nWTF = new Button();
+        nWTF.Content = "网络流量费充值";
+        nWTF.Height = 25;
+        nWTF.Width = 90;
+        Thickness nWTFthickness = new Thickness(10, 25, 10, 10);
+        nWTF.Margin = nWTFthickness;
+        nWTF.HorizontalAlignment = HorizontalAlignment.Left;
+        nWTF.Click += new RoutedEventHandler(NetWorkTrafficFee);
+
+        Button cCF = new Button();
+        cCF.Content = "校园卡充值";
+        cCF.Height = 25;
+        cCF.Width = 90;
+        Thickness cCFthickness = new Thickness(10, 25, 10, 10);
+        cCF.Margin = cCFthickness;
+        cCF.HorizontalAlignment = HorizontalAlignment.Right;
+        cCF.Click += new RoutedEventHandler(CampusCardFee);
+
+        grid.Children.Add(choice);
+        grid.Children.Add(nWTF);
+        grid.Children.Add(cCF);
+
+        Content = grid;
+        Title = "微信扫码支付";
+        Height = 100;
+        Width = 230;
+        ResizeMode = ResizeMode.NoResize;
+        ShowDialog();
+    }
+    /// <summary>
+    /// 选择网络流量费充值
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void NetWorkTrafficFee(object sender, RoutedEventArgs e)
+    {
+        whichOne = true;
+        Close();
+    }
+    /// <summary>
+    /// 选择校园卡账户充值
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void CampusCardFee(object sender, RoutedEventArgs e)
+    {
+        whichOne = false;
+        Close();
+    }
+    /// <summary>
+    /// 获取选择状态
+    /// </summary>
+    /// <returns></returns>
+    public bool getChoice()
+    {
+        return whichOne;
+    }
+}
+/// <summary>
+/// 创建QR码窗口
+/// </summary>
+class QRImg : Window
+{
+    public QRImg(string qRCodepath, bool type)
+    {
+        Grid grid = new Grid();
+
+        ImageBrush imageBrush = new ImageBrush();
+        imageBrush.ImageSource = new BitmapImage(new Uri(qRCodepath, UriKind.Relative));
+        Image image = new Image();
+        image.Source = imageBrush.ImageSource;
+        image.HorizontalAlignment = HorizontalAlignment.Center;
+        image.VerticalAlignment = VerticalAlignment.Top;
+        image.Height = 260;
+        image.Width = 260;
+
+        Label label = new Label();
+        label.Content = type ? "扫码支付后关闭窗口\n2-5分钟后更新余额" : "扫码支付后关闭窗口";
+        label.Height = 50;
+        label.HorizontalAlignment = HorizontalAlignment.Center;
+        label.VerticalAlignment = VerticalAlignment.Bottom;
+
+        grid.Children.Add(image);
+        grid.Children.Add(label);
+
+        Content = grid;
+        Title = "微信扫码支付";
+        Height = 350;
+        Width = 300;
+        ResizeMode = ResizeMode.NoResize;
+        ShowDialog();
     }
 }

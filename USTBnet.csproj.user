@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
-    <PublishUrlHistory>D:\Users\MuYe\Documents\GitHub\USTBnet\|ftp://10.15.138.49/USTBnet/|ftp://10.15.138.49/|C:\Users\MuYe\Desktop\USTBnet\|ftp://bxw2359310667.my3w.com/USTBnet/</PublishUrlHistory>
+    <PublishUrlHistory>E:\uTorrent\USTBnet\安装版\|C:\Users\MuYe\Desktop\|D:\Users\MuYe\Documents\GitHub\USTBnet\|ftp://10.15.138.49/USTBnet/|ftp://10.15.138.49/</PublishUrlHistory>
     <InstallUrlHistory>http://10.15.138.49:8000/|http://10.15.138.49:8000/USTBnet/|http://muyeyifeng.cn/USTBnet/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory>http://10.15.138.49:8000/|http://muyeyifeng.cn/USTBnet/</UpdateUrlHistory>
