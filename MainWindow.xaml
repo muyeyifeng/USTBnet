@@ -8,7 +8,8 @@
         Title="校园网登录程序"
         Width="300"
         Height="200"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Closing="Window_Closing">
     <TabControl TabStripPlacement="Top">
         <TabItem Header="登陆页面" Width="70">
             <Grid Name="LoginGrid">
@@ -24,6 +25,7 @@
 
                 <Button Name="ClearButton" Click="Clear_Click" Content="清除" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,100,0,0"></Button>
                 <Button Name="ExitButton" Click="Exit_Click" Content="退出" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"/>
+                <CheckBox Name="AutoLogin" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" Margin="0,5,5,0" IsChecked="True" ToolTip="自动登录"></CheckBox>
                 <!--隐藏控件-->
                 <TextBox Name="showPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
             </Grid>

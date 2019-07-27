@@ -9,8 +9,8 @@ using System.Windows;
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("USTBnet")]
 [assembly: AssemblyDescription("用于北京科技大学校园网登陆及电子支付")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyConfiguration("Release")]
+[assembly: AssemblyCompany("MYYF")]
 [assembly: AssemblyProduct("USTBnet")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("Muyeyifeng")]
@@ -51,5 +51,5 @@ using System.Windows;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+//[assembly: AssemblyVersion("1.0.0.0")]
+//[assembly: AssemblyFileVersion("1.0.0.0")]

@@ -24,8 +24,10 @@ namespace USTBnet
         {
             try
             {
-                HttpClient httpClient = new HttpClient(httpClientHandler);
-                httpClient.Timeout = TimeSpan.FromSeconds(3);
+                HttpClient httpClient = new HttpClient(httpClientHandler)
+                {
+                    Timeout = TimeSpan.FromSeconds(3)
+                };
                 var getAsync = httpClient.GetStringAsync(host);
                 getAsync.Wait();
                 string finalget = getAsync.Result;
@@ -49,8 +51,10 @@ namespace USTBnet
             {
                 Dictionary<string, string> keyValuePairs = GroupKeyValues(paramNames, param);
                 var content = new FormUrlEncodedContent(keyValuePairs);
-                HttpClient httpClient = new HttpClient(httpClientHandler);
-                httpClient.Timeout = TimeSpan.FromSeconds(3);
+                HttpClient httpClient = new HttpClient(httpClientHandler)
+                {
+                    Timeout = TimeSpan.FromSeconds(3)
+                };
                 var postAsync = httpClient.PostAsync(host, content);
                 postAsync.Wait();
                 HttpResponseMessage httpResponseMessage = postAsync.Result;
@@ -163,8 +167,10 @@ namespace USTBnet
             {
                 if (!String.IsNullOrEmpty(picUrl))
                 {
-                    HttpClient getAuthImage = new HttpClient(httpClientHandler);
-                    getAuthImage.Timeout = TimeSpan.FromSeconds(0.5);
+                    HttpClient getAuthImage = new HttpClient(httpClientHandler)
+                    {
+                        Timeout = TimeSpan.FromSeconds(0.5)
+                    };
                     var inputStream = getAuthImage.GetStreamAsync(picUrl);
                     inputStream.Wait();
                     Stream imageStream = inputStream.Result;
@@ -209,7 +215,7 @@ namespace USTBnet
         private static readonly string[] scardRechargeCreateOrderParamsName = { "payAmt", "factorycode", "payProjectId" };
 
         //网络访问进程，网络流量费与校园卡充值共用payCenterHttpClientHandler
-        private static HttpClientHandler payCenterHttpClientHandler = new HttpClientHandler() { UseCookies = true };
+        private static readonly HttpClientHandler payCenterHttpClientHandler = new HttpClientHandler() { UseCookies = true };
         /// <summary>
         /// 发送一次POST获取Cookie
         /// </summary>
@@ -280,7 +286,7 @@ namespace USTBnet
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static string getBalance(string username)
+        public static string GetBalance(string username)
         {
             PostHttpRequest(payCenterHttpClientHandler, NWTF_checkPayProject, null, null);
             string balance = BalanceSubString(username);
@@ -293,8 +299,10 @@ namespace USTBnet
         /// <returns></returns>
         private static string BalanceSubString(string username)
         {
-            HttpClient httpClient = new HttpClient(payCenterHttpClientHandler);
-            httpClient.Timeout = TimeSpan.FromSeconds(3);
+            HttpClient httpClient = new HttpClient(payCenterHttpClientHandler)
+            {
+                Timeout = TimeSpan.FromSeconds(3)
+            };
             var getAsync = httpClient.GetAsync(NWTF_netdetails511N004);
             HttpResponseMessage httpResponseMessage = getAsync.Result;
             HttpRequestMessage requestsMessage = httpResponseMessage.RequestMessage;
@@ -353,12 +361,9 @@ namespace USTBnet
             //POST https://pay.ustb.edu.cn/onlinePay HTTP/1.1
             //payType=03&orderno=10008190529019604936&orderamt=10.00
             //302-><div id="code" ><img src="data:image/png;base64,***"</img></div>
-            string orderno;
-            jsonValuePairs.TryGetValue("orderno", out orderno);
-            string orderamt;
-            jsonValuePairs.TryGetValue("orderamt", out orderamt);
-            double tmpOrderamt;
-            double.TryParse(orderamt, out tmpOrderamt);
+            jsonValuePairs.TryGetValue("orderno", out string orderno);
+            jsonValuePairs.TryGetValue("orderamt", out string orderamt);
+            double.TryParse(orderamt, out double tmpOrderamt);
             orderamt = (tmpOrderamt / 100).ToString();
             string[] param = { "03", orderno, orderamt };
             try
@@ -390,7 +395,7 @@ namespace USTBnet
         private static readonly string CNL_drop = "http://202.204.48.82/F.htm";
         private static readonly string[] ParamsName = new string[] { "DDDDD", "upass", "v6ip", "0MKKey" };
         //网络访问进程,登陆校园网单独使用(实际并不需要特意设定静态变量)
-        private static HttpClientHandler loginHttpClientHandler = new HttpClientHandler() { UseCookies = true };
+        private static readonly HttpClientHandler loginHttpClientHandler = new HttpClientHandler() { UseCookies = true };
         /// <summary>
         /// POST用户名及密码登陆
         /// </summary>
@@ -427,7 +432,7 @@ namespace USTBnet
         /// </summary>
         public static void Drop()
         {
-            PostHttpRequest(loginHttpClientHandler, CNL_drop, null, null);
+            GetHttpRequest(loginHttpClientHandler, CNL_drop);
         }
         /// <summary>
         /// 取出用户信息，利用字典存储以便读取
@@ -455,14 +460,13 @@ namespace USTBnet
         /// <returns></returns>
         private static string BuildMes(Dictionary<string, string> userValuePairs)
         {
-            string time, flow, fee, v6af, v46m, v4ip, v6ip;
-            userValuePairs.TryGetValue("time", out time);
-            userValuePairs.TryGetValue("flow", out flow);
-            userValuePairs.TryGetValue("fee", out fee);
-            userValuePairs.TryGetValue("v6af", out v6af);
-            userValuePairs.TryGetValue("v46m", out v46m);
-            userValuePairs.TryGetValue("v4ip", out v4ip);
-            userValuePairs.TryGetValue("v6ip", out v6ip);
+            userValuePairs.TryGetValue("time", out string time);
+            userValuePairs.TryGetValue("flow", out string flow);
+            userValuePairs.TryGetValue("fee", out string fee);
+            userValuePairs.TryGetValue("v6af", out string v6af);
+            userValuePairs.TryGetValue("v46m", out string v46m);
+            userValuePairs.TryGetValue("v4ip", out string v4ip);
+            userValuePairs.TryGetValue("v6ip", out string v6ip);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("登陆成功！\n");
             stringBuilder.Append("连接时长：").Append(time).Append("分\n");

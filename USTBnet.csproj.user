@@ -2,10 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
-    <PublishUrlHistory>E:\uTorrent\USTBnet\安装版\|C:\Users\MuYe\Desktop\|D:\Users\MuYe\Documents\GitHub\USTBnet\|ftp://10.15.138.49/USTBnet/|ftp://10.15.138.49/</PublishUrlHistory>
-    <InstallUrlHistory>http://10.15.138.49:8000/|http://10.15.138.49:8000/USTBnet/|http://muyeyifeng.cn/USTBnet/</InstallUrlHistory>
+    <PublishUrlHistory>ftp://download-cd.muyeyifeng.top/USTBnet/|ftp://10.15.138.138/USTBnet/|ftp://10.15.138.138/|E:\uTorrent\USTBnet\安装版\|C:\Users\MuYe\Desktop\</PublishUrlHistory>
+    <InstallUrlHistory>http://download-cd.muyeyifeng.top:82/|http://cdsv.muyeyifeng.top:81/|http://download-cd.muyeyifeng.top:81/|http://10.15.138.138:8000/|http://10.15.138.49:8000/</InstallUrlHistory>
     <SupportUrlHistory />
-    <UpdateUrlHistory>http://10.15.138.49:8000/|http://muyeyifeng.cn/USTBnet/</UpdateUrlHistory>
+    <UpdateUrlHistory>http://10.15.138.138:8000/|http://10.15.138.138/|http://10.15.138.49:8000/|http://muyeyifeng.cn/USTBnet/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
     <FallbackCulture>zh-CN</FallbackCulture>
