@@ -40,11 +40,11 @@ namespace USTBnet
             try
             {
                 LoadLogin(out bool flag);
+                LoadPay();
+                RefreshAuthImage();
                 if (flag) {
                     Login();
-                    LoadPay();
                     Close();
-                    RefreshAuthImage();
                 }
                 InitIconFrom();
             }
