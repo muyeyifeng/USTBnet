@@ -491,7 +491,7 @@ namespace USTBnet
                 StringBuilder info = new StringBuilder();
                 info.Append("制作人：muyeyifeng\n");
                 info.Append("版本：").Append(version).Append("\n");
-                info.Append("联系方式：master__foreign@muyeyifeng.co");
+                info.Append("联系方式：master@muyeyifeng.site");
                 Information.Content = info.ToString();
             }
             catch
