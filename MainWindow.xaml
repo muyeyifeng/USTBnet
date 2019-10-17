@@ -17,14 +17,14 @@
                 <TextBox Name="userid" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,0,0,0" />
                 <Label Content="密码" Name="pMes" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,30,0,0" Height="25" Width="70"></Label>
                 <PasswordBox Name="passwd" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
-                <Image Name="passwdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0" PreviewMouseDown="PasswdVisibility_PreviewMouseDown" PreviewMouseUp="PasswdVisibility_PreviewMouseUp"></Image>
+                <Image Name="passwdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0"  MouseEnter="PasswdVisibility_MouseEnter" MouseLeave="PasswdVisibility_MouseLeave"></Image>
 
 
                 <Button Name="LoginButton" Click="Login_Click" Content="登录/刷新" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0"></Button>
                 <Button Name="DropButton" Click="Drop_Click" Content="注销" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,70,50,0"/>
 
                 <Button Name="ClearButton" Click="Clear_Click" Content="清除" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,100,0,0"></Button>
-                <Button Name="ExitButton" Click="Exit_Click" Content="退出" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"/>
+                <Button Name="ExitButton" Click="Exit_Click" Content="最小化" Width="75" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,100,50,0"/>
                 <CheckBox Name="AutoLogin" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Center" Margin="0,5,5,0" IsChecked="True" ToolTip="自动登录"></CheckBox>
                 <!--隐藏控件-->
                 <TextBox Name="showPasswd" Visibility="Hidden" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
@@ -43,7 +43,7 @@
                 <!--待隐藏控件-->
                 <Label Name="paypwd" Content="密码" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="20,30,0,0" Height="25" Width="70"></Label>
                 <PasswordBox Name="paypasswd" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" Margin="80,30,0,0" />
-                <Image Name="paypasswdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0" PreviewMouseDown="PaypasswdVisibility_PreviewMouseDown" PreviewMouseUp="PaypasswdVisibility_PreviewMouseUp"></Image>
+                <Image Name="paypasswdVisibility" Source="icon/eye_no.png" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,35,5,0" MouseEnter="PaypasswdVisibility_MouseEnter" MouseLeave="PaypasswdVisibility_MouseLeave"></Image>
                 <TextBox Name="payauth" VerticalAlignment="Top" Height="25" Width="150" IsEnabled="True" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="80,60,0,0" />
 
                 <Image Name="authImage" Source="icon/error.png" Width="85" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="15,60,0,0" PreviewMouseDown="AuthImageBtn_Click"></Image>

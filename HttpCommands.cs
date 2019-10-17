@@ -28,10 +28,12 @@ namespace USTBnet
                 {
                     Timeout = TimeSpan.FromSeconds(3)
                 };
+
                 var getAsync = httpClient.GetStringAsync(host);
                 getAsync.Wait();
                 string finalget = getAsync.Result;
                 return finalget;
+
             }
             catch
             {
@@ -62,6 +64,7 @@ namespace USTBnet
                 var readAsync = httpResponseMessage.Content.ReadAsStringAsync();
                 readAsync.Wait();
                 return readAsync.Result;
+
             }
             catch
             {
@@ -189,6 +192,7 @@ namespace USTBnet
                     fileStream.Close();
                     imageStream.Close();
                     result = fileName;
+
                 }
             }
             catch (Exception e)
@@ -322,6 +326,7 @@ namespace USTBnet
                 catch { }
             }
             return "302";
+
         }
         /// <summary>
         /// 创建订单

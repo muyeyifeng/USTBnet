@@ -42,11 +42,13 @@ namespace USTBnet
                 LoadLogin(out bool flag);
                 LoadPay();
                 RefreshAuthImage();
-                if (flag) {
+                if (flag)
+                {
                     Login();
                     Close();
                 }
                 InitIconFrom();
+                //MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory);
             }
             catch
             {
@@ -76,20 +78,19 @@ namespace USTBnet
         {
             this.Close();
         }
-        private void PasswdVisibility_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PasswdVisibility_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ChangeImage(true, passwdVisibility, passwd, showPasswd);
         }
-        private void PasswdVisibility_PreviewMouseUp(object sender, System.Windows.Input.MouseEventArgs e)
+        private void PasswdVisibility_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ChangeImage(false, passwdVisibility, passwd, showPasswd);
-
         }
-        private void PaypasswdVisibility_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PaypasswdVisibility_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ChangeImage(true, paypasswdVisibility, paypasswd, payShowPasswd);
         }
-        private void PaypasswdVisibility_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PaypasswdVisibility_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ChangeImage(false, paypasswdVisibility, paypasswd, payShowPasswd);
         }
@@ -255,7 +256,7 @@ namespace USTBnet
             string _payuserid = payuserid.Text;
             string _paypasswd = paypasswd.Password;
             string _checkcode = payauth.Text;
-            if (_payuserid != "" && _paypasswd != "" && _checkcode != "")
+            if (string.IsNullOrEmpty(_payuserid) && string.IsNullOrEmpty(_paypasswd) && string.IsNullOrEmpty(_checkcode))
             {
                 string status = Pay.PostLogin(new string[] { _payuserid, _paypasswd, _checkcode });
                 if (status == "301")
@@ -326,9 +327,7 @@ namespace USTBnet
                 else
                 {
                     string qRCodepath = Pay.Base64StringToImage(status);
-
                     new QRImg(qRCodepath, type == 1);
-
                     reCharge.Text = "";
                     ChangePayControl("", false);
                     RefreshAuthImage();
@@ -513,6 +512,7 @@ namespace USTBnet
             };
             notifyIcon.Visible = true;
             notifyIcon.MouseDown += new MouseEventHandler(NotifyIcon_MouseDown);
+
         }
         /// <summary>
         /// 重写Closing函数
@@ -546,11 +546,15 @@ namespace USTBnet
             }
             else if (e.Button == MouseButtons.Right)
             {
+                string isStartUp = CreatLnkInStartup.StartPathIsExists() ? "取消开机启动" : "设置开启启动";
                 ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
                 contextMenuStrip.Items.Add("退出", null, new EventHandler(Exit));
+                contextMenuStrip.Items.Add(isStartUp, null, new EventHandler(ChangeStartUp));
                 contextMenuStrip.Show(System.Windows.Forms.Control.MousePosition);
+
             }
         }
+
         /// <summary>
         /// 退出事件
         /// </summary>
@@ -560,6 +564,13 @@ namespace USTBnet
         {
             f_exit = true;
             this.Close();
+        }
+        private void ChangeStartUp(object sender, EventArgs e)
+        {
+            if (CreatLnkInStartup.StartPathIsExists())
+                CreatLnkInStartup.RemoveStartUp();
+            else
+                CreatLnkInStartup.CopyToStartUp();
         }
     }
 }
