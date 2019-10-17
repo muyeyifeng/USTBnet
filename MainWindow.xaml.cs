@@ -567,10 +567,14 @@ namespace USTBnet
         }
         private void ChangeStartUp(object sender, EventArgs e)
         {
-            if (CreatLnkInStartup.StartPathIsExists())
-                CreatLnkInStartup.RemoveStartUp();
-            else
-                CreatLnkInStartup.CopyToStartUp();
+            string isStartUp = CreatLnkInStartup.StartPathIsExists() ? "取消" : "设置";
+            if (MessageBox.Show("是否"+isStartUp+"开机自启：", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                if (CreatLnkInStartup.StartPathIsExists())
+                    CreatLnkInStartup.RemoveStartUp();
+                else
+                    CreatLnkInStartup.CopyToStartUp();
+            }
         }
     }
 }
