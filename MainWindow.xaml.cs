@@ -550,8 +550,9 @@ namespace USTBnet
                 ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
                 contextMenuStrip.Items.Add("退出", null, new EventHandler(Exit));
                 contextMenuStrip.Items.Add(isStartUp, null, new EventHandler(ChangeStartUp));
+                contextMenuStrip.MouseLeave += new EventHandler(ChangeVisible);
+                ChangeVisible(contextMenuStrip,new EventArgs());
                 contextMenuStrip.Show(System.Windows.Forms.Control.MousePosition);
-
             }
         }
 
@@ -565,10 +566,15 @@ namespace USTBnet
             f_exit = true;
             this.Close();
         }
+        private void ChangeVisible(object sender, EventArgs e)
+        {
+            ContextMenuStrip contextMenuStrip = (ContextMenuStrip)sender;
+            contextMenuStrip.Close();
+        }
         private void ChangeStartUp(object sender, EventArgs e)
         {
             string isStartUp = CreatLnkInStartup.StartPathIsExists() ? "取消" : "设置";
-            if (MessageBox.Show("是否"+isStartUp+"开机自启：", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("是否"+isStartUp+"开机自启?", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 if (CreatLnkInStartup.StartPathIsExists())
                     CreatLnkInStartup.RemoveStartUp();
